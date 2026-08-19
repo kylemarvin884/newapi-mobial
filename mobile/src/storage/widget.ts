@@ -1,13 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createElement } from 'react';
 import { Platform } from 'react-native';
+
+import { storageKey as namespacedStorageKey } from '@/constants/app';
 import { requestWidgetUpdate } from 'react-native-android-widget';
 
 import { BalanceWidget } from '@/widgets/BalanceWidget';
 import type { Balance } from '@/types/api';
 import type { Language } from '@/contexts/LanguageContext';
 
-const snapshotKey = 'kyle-ai-balance-widget';
+const snapshotKey = namespacedStorageKey('balance-widget');
 
 export interface BalanceWidgetSnapshot {
   currencySymbol: string;

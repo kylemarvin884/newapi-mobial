@@ -9,7 +9,7 @@ https://你的域名/api/v1
 除登录、注册和两步验证外，接口使用：
 
 ```http
-Authorization: Bearer <Kyle AI session token>
+Authorization: Bearer <your-app-session-token>
 ```
 
 ## 系统

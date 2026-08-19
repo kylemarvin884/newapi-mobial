@@ -32,6 +32,7 @@ import Markdown from 'react-native-markdown-display';
 import { api } from '@/api/client';
 import { EmptyState } from '@/components/EmptyState';
 import { Screen } from '@/components/Screen';
+import { appName } from '@/constants/app';
 import { colors, radius } from '@/constants/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -559,7 +560,7 @@ export default function ChatScreen() {
         style={styles.container}>
         <View style={styles.chatHeader}>
           <View style={styles.chatIdentity}>
-            <Text style={styles.chatEyebrow}>Kyle AI</Text>
+            <Text style={styles.chatEyebrow}>{appName}</Text>
             <Text numberOfLines={1} style={styles.chatTitle}>{activeConversation?.title || t('newChat')}</Text>
           </View>
           <View style={styles.headerActions}>

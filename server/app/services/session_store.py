@@ -48,10 +48,11 @@ class KeyValueStore(Protocol):
 class SessionStore:
     pending_login_ttl = 5 * 60
 
-    def __init__(self, redis: KeyValueStore, secret_box: SecretBox, ttl: int):
+    def __init__(self, redis: KeyValueStore, secret_box: SecretBox, ttl: int, namespace: str = "newapi-mobile"):
         self.redis = redis
         self.secret_box = secret_box
         self.ttl = ttl
+        self.namespace = namespace
 
     async def create(self, session: UpstreamSession) -> str:
         token = new_session_token()
@@ -106,10 +107,10 @@ class SessionStore:
     async def add_used_tokens(self, user_id: int, amount: int) -> int:
         if amount <= 0:
             return await self.get_used_tokens(user_id)
-        return int(await self.redis.incrby(f"kyle-ai:usage:{user_id}:tokens", amount))
+        return int(await self.redis.incrby(f"{self.namespace}:usage:{user_id}:tokens", amount))
 
     async def get_used_tokens(self, user_id: int) -> int:
-        raw = await self.redis.get(f"kyle-ai:usage:{user_id}:tokens")
+        raw = await self.redis.get(f"{self.namespace}:usage:{user_id}:tokens")
         return int(raw or 0)
 
     @asynccontextmanager

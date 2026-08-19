@@ -57,13 +57,19 @@ docker compose up -d --build
 
 ```bash
 python -m pip install -r requirements-docs.txt
+$env:DOCS_SITE_URL = 'https://docs.example.com/'
+$env:REPO_URL = 'https://github.com/your-org/your-repo'
+$env:REPO_NAME = 'your-org/your-repo'
 mkdocs build --strict
+
+# Linux/macOS 示例：
+# DOCS_SITE_URL=https://docs.example.com/ REPO_URL=https://github.com/your-org/your-repo REPO_NAME=your-org/your-repo mkdocs build --strict
 ```
 
 生成目录是 `site/`。将其同步到服务器文档站根目录，例如：
 
 ```bash
-rsync -az --delete site/ root@服务器:/www/wwwroot/docs.lianhaotian.com/
+rsync -az --delete site/ root@服务器:/www/wwwroot/docs.example.com/
 ```
 
 仓库提供 `deploy/deploy-docs.sh`，在服务器拉取公开仓库后可直接执行：
@@ -74,7 +80,7 @@ chmod +x deploy/deploy-docs.sh
 ./deploy/deploy-docs.sh
 ```
 
-在宝塔中创建纯静态站点，绑定 `docs.lianhaotian.com`，申请 Let's Encrypt 证书并开启 HTTP → HTTPS。网站目录指向 `/www/wwwroot/docs.lianhaotian.com`，默认文档使用 `index.html`。
+在宝塔中创建纯静态站点，绑定你自己的文档域名（例如 `docs.example.com`），申请 Let's Encrypt 证书并开启 HTTP → HTTPS。网站目录指向 `/www/wwwroot/docs.example.com`，默认文档使用 `index.html`。
 
 ## 日志和隐私
 

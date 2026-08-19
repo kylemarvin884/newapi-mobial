@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-REPO_URL="${REPO_URL:-https://github.com/kylemarvin884/newapi-mobial.git}"
+REPO_URL="${REPO_URL:-https://github.com/your-org/your-repo.git}"
 SOURCE_DIR="${SOURCE_DIR:-/opt/newapi-mobial}"
-WEB_ROOT="${WEB_ROOT:-/www/wwwroot/docs.lianhaotian.com}"
+WEB_ROOT="${WEB_ROOT:-/www/wwwroot/docs.example.com}"
 VENV_DIR="${VENV_DIR:-/opt/newapi-mobial-docs-venv}"
 BRANCH="${BRANCH:-main}"
 
@@ -40,4 +40,4 @@ if id www >/dev/null 2>&1; then
 fi
 
 echo "文档已部署到 $WEB_ROOT"
-echo "请访问：https://docs.lianhaotian.com/"
+echo "请访问你的文档域名（默认构建目录：$WEB_ROOT）"

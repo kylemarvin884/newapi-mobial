@@ -2,7 +2,9 @@ import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
-const sessionKey = 'kyle-ai-session';
+import { storageKey } from '@/constants/app';
+
+const sessionKey = storageKey('session');
 
 export async function readSessionToken(): Promise<string | null> {
   if (Platform.OS === 'web') return AsyncStorage.getItem(sessionKey);

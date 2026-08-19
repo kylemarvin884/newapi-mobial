@@ -15,6 +15,7 @@ import { Alert, Linking, Pressable, ScrollView, Share, StyleSheet, Text, View } 
 
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { Screen } from '@/components/Screen';
+import { appName } from '@/constants/app';
 import { colors } from '@/constants/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -88,7 +89,7 @@ export default function ProfileScreen() {
       await Share.share({
         title: t('shareApp'),
         message: language === 'en'
-          ? `Kyle AI puts multi-model chat, image generation, balance, and API key management in your pocket.\n\nDownload: ${latest?.share_url || platformShareUrl}`
+          ? `${appName} puts multi-model chat, image generation, balance, and API key management in your pocket.\n\nDownload: ${latest?.share_url || platformShareUrl}`
           : buildShareMessage(latest),
       });
     } catch (shareError) {

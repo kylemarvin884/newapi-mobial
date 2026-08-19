@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, type PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 
+import { appName, storageKey as namespacedStorageKey } from '@/constants/app';
+
 export type Language = 'zh' | 'en';
 
-const storageKey = 'kyle-ai-language';
+const storageKey = namespacedStorageKey('language');
 
 const zh = {
   login: '登录', register: '注册', username: '用户名', email: '邮箱', password: '密码',
@@ -24,8 +26,8 @@ const zh = {
   accountOverview: '账户概览', availableBalance: '可用余额', totalUsed: '累计消耗', requests: '请求次数',
   totalTokens: '累计 Token', balanceFailed: '获取余额失败',
   unbound: '未绑定', group: '分组', version: '版本', latest: '最新', language: '语言', chinese: '中文', english: 'English',
-  shareTitle: '把 Kyle AI 分享给朋友', shareDescription: '多模型聊天、生图、余额查询和密钥管理，一个 App 全部搞定。',
-  shareHint: '点击分享后可选择微信、QQ 等应用', shareApp: '分享 Kyle AI', checkUpdate: '检查更新',
+  shareTitle: '把 {appName} 分享给朋友', shareDescription: '多模型聊天、生图、余额查询和密钥管理，一个 App 全部搞定。',
+  shareHint: '点击分享后可选择微信、QQ 等应用', shareApp: '分享 {appName}', checkUpdate: '检查更新',
   refreshAccount: '刷新账户', logout: '退出登录', downloadVersion: '下载新版本',
   widgetHint: '桌面小组件会显示最近同步的余额和累计 Token。',
   credentials: '访问凭证', createKey: '创建 API Key', noKey: '还没有 API Key', noKeyHint: '创建一个密钥后即可开始聊天',
@@ -54,8 +56,8 @@ const en: Record<keyof typeof zh, string> = {
   accountOverview: 'Account overview', availableBalance: 'Available balance', totalUsed: 'Total spent', requests: 'Requests',
   totalTokens: 'Total tokens', balanceFailed: 'Failed to load balance',
   unbound: 'Not linked', group: 'Group', version: 'Version', latest: 'Latest', language: 'Language', chinese: '中文', english: 'English',
-  shareTitle: 'Share Kyle AI with friends', shareDescription: 'Chat, image generation, balance, and API key management in one app.',
-  shareHint: 'Share through any app installed on your phone', shareApp: 'Share Kyle AI', checkUpdate: 'Check for updates',
+  shareTitle: 'Share {appName} with friends', shareDescription: 'Chat, image generation, balance, and API key management in one app.',
+  shareHint: 'Share through any app installed on your phone', shareApp: 'Share {appName}', checkUpdate: 'Check for updates',
   refreshAccount: 'Refresh account', logout: 'Sign out', downloadVersion: 'Download version',
   widgetHint: 'The home screen widget shows the most recently synced balance and total tokens.',
   credentials: 'Access credentials', createKey: 'Create API Key', noKey: 'No API keys yet', noKeyHint: 'Create a key to start chatting',
@@ -90,7 +92,7 @@ export function LanguageProvider({ children }: PropsWithChildren) {
       setLanguageState(nextLanguage);
       void AsyncStorage.setItem(storageKey, nextLanguage);
     },
-    t: (key) => (language === 'en' ? en[key] : zh[key]),
+    t: (key) => (language === 'en' ? en[key] : zh[key]).replaceAll('{appName}', appName),
   }), [language]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

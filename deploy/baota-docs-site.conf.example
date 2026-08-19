@@ -1,14 +1,14 @@
 server {
     listen 80;
     listen 443 ssl http2;
-    server_name docs.lianhaotian.com;
+    server_name docs.example.com;
 
     index index.html;
-    root /www/wwwroot/docs.lianhaotian.com;
+    root /www/wwwroot/docs.example.com;
 
     # Let Baota manage and replace these certificate paths.
-    ssl_certificate     /www/server/panel/vhost/cert/docs.lianhaotian.com/fullchain.pem;
-    ssl_certificate_key /www/server/panel/vhost/cert/docs.lianhaotian.com/privkey.pem;
+    ssl_certificate     /www/server/panel/vhost/cert/docs.example.com/fullchain.pem;
+    ssl_certificate_key /www/server/panel/vhost/cert/docs.example.com/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
 
     if ($server_port !~ 443) {
@@ -29,6 +29,6 @@ server {
     add_header Referrer-Policy strict-origin-when-cross-origin always;
     add_header X-Frame-Options SAMEORIGIN always;
 
-    access_log /www/wwwlogs/docs.lianhaotian.com.log;
-    error_log  /www/wwwlogs/docs.lianhaotian.com.error.log;
+    access_log /www/wwwlogs/docs.example.com.log;
+    error_log  /www/wwwlogs/docs.example.com.error.log;
 }

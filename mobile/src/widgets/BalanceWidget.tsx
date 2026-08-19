@@ -1,5 +1,6 @@
 import { FlexWidget, TextWidget } from 'react-native-android-widget';
 
+import { appName } from '@/constants/app';
 import type { BalanceWidgetSnapshot } from '@/storage/widget';
 
 function formatTokens(value: number): string {
@@ -18,7 +19,7 @@ export function BalanceWidget({ snapshot }: { snapshot: BalanceWidgetSnapshot })
     : '--:--';
   return (
     <FlexWidget
-      accessibilityLabel={english ? 'Kyle AI balance and token usage' : 'Kyle AI 余额和 Token 消耗'}
+      accessibilityLabel={english ? `${appName} balance and token usage` : `${appName} 余额和 Token 消耗`}
       clickAction="OPEN_APP"
       style={{
         width: 'match_parent',
@@ -30,7 +31,7 @@ export function BalanceWidget({ snapshot }: { snapshot: BalanceWidgetSnapshot })
         justifyContent: 'space-between',
       }}>
       <TextWidget
-        text="Kyle AI"
+        text={appName}
         style={{ color: '#FFFFFF', fontSize: 15, fontWeight: '700' }}
       />
       <FlexWidget style={{ flexDirection: 'row', justifyContent: 'space-between', width: 'match_parent' }}>

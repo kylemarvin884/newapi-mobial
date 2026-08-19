@@ -1,6 +1,8 @@
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
+import { appName } from '@/constants/app';
+
 export interface AppRelease {
   version: string;
   version_code: number;
@@ -24,40 +26,21 @@ const publicEnvironment: Record<string, string | undefined> = {
   iosShareUrl: process.env.EXPO_PUBLIC_IOS_SHARE_URL,
 };
 
-function configuredString(name: string, fallback: string): string {
+function configuredString(name: string): string {
   const environmentValue = publicEnvironment[name];
   if (environmentValue) return environmentValue;
   const value = extra?.[name];
-  return typeof value === 'string' && value ? value : fallback;
+  return typeof value === 'string' && value ? value : '';
 }
 
 export const currentAppVersion = Constants.expoConfig?.version ?? '0.0.0';
 
-export const androidDownloadUrl = configuredString(
-  'androidDownloadUrl',
-  'https://app-api.lianhaotian.com/downloads/kyle-ai.apk',
-);
-export const androidReleaseManifestUrl = configuredString(
-  'androidReleaseManifestUrl',
-  'https://app-api.lianhaotian.com/downloads/android-release.json',
-);
-export const androidShareUrl = configuredString(
-  'androidShareUrl',
-  'https://app-api.lianhaotian.com/download',
-);
-
-export const iosDownloadUrl = configuredString(
-  'iosDownloadUrl',
-  'https://app-api.lianhaotian.com/ios',
-);
-export const iosReleaseManifestUrl = configuredString(
-  'iosReleaseManifestUrl',
-  'https://app-api.lianhaotian.com/downloads/ios-release.json',
-);
-export const iosShareUrl = configuredString(
-  'iosShareUrl',
-  'https://app-api.lianhaotian.com/ios',
-);
+export const androidDownloadUrl = configuredString('androidDownloadUrl');
+export const androidReleaseManifestUrl = configuredString('androidReleaseManifestUrl');
+export const androidShareUrl = configuredString('androidShareUrl');
+export const iosDownloadUrl = configuredString('iosDownloadUrl');
+export const iosReleaseManifestUrl = configuredString('iosReleaseManifestUrl');
+export const iosShareUrl = configuredString('iosShareUrl');
 
 export const platformDownloadUrl = isIOS ? iosDownloadUrl : androidDownloadUrl;
 export const platformReleaseManifestUrl = isIOS
@@ -66,9 +49,9 @@ export const platformReleaseManifestUrl = isIOS
 export const platformShareUrl = isIOS ? iosShareUrl : androidShareUrl;
 
 const defaultShareText = [
-  '🚀 Kyle AI，让多种 AI 模型随时装进口袋。',
+  `🚀 ${appName}，让多种 AI 模型随时装进口袋。`,
   '✨ 支持智能聊天、AI 生图、余额查询和 API Key 管理。',
-  '🔐 账号直接连接 Kyle AI 服务，简单、安全又方便。',
+  '🔐 账号直接连接你的服务，简单、安全又方便。',
 ].join('\n');
 
 function parseRelease(value: unknown): AppRelease {
@@ -123,6 +106,7 @@ export function isNewerVersion(latest: string, current: string): boolean {
 
 export async function fetchRelease(): Promise<AppRelease> {
   const manifestUrl = platformReleaseManifestUrl;
+  if (!manifestUrl) throw new Error('未配置版本清单地址');
   const separator = manifestUrl.includes('?') ? '&' : '?';
   const response = await fetch(`${manifestUrl}${separator}time=${Date.now()}`, {
     headers: { Accept: 'application/json' },
@@ -134,5 +118,5 @@ export async function fetchRelease(): Promise<AppRelease> {
 export const fetchAndroidRelease = fetchRelease;
 
 export function buildShareMessage(release?: AppRelease | null): string {
-  return `${release?.share_text || defaultShareText}\n\n📲 软件介绍与下载：${release?.share_url || platformShareUrl}`;
+  return `${release?.share_text || defaultShareText}\n\n${platformShareUrl ? `📲 软件介绍与下载：${release?.share_url || platformShareUrl}` : ''}`.trim();
 }

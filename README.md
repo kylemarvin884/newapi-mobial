@@ -1,6 +1,6 @@
-# NewAPI Mobile（Kyle AI）
+# NewAPI Mobile
 
-Kyle AI 是一个面向 NewAPI 的开源移动客户端与安全代理后端。用户可以在 Android / iOS App 中登录自己的 NewAPI 账号，进行多模型聊天、AI 生图、余额查询及 API Key 管理。
+NewAPI Mobile 是一个面向 NewAPI 的开源移动客户端与安全代理后端。用户可以在 Android / iOS App 中登录自己的 NewAPI 账号，进行多模型聊天、AI 生图、余额查询及 API Key 管理。
 
 > 目标：服务器管理员只需阅读仓库文档，就能将后端部署到自己的 Linux 服务器，并构建连接自己域名和 NewAPI 实例的 App。
 
@@ -87,7 +87,7 @@ npx expo start
 EXPO_PUBLIC_API_BASE_URL=https://你的-api-域名/api/v1
 ```
 
-生产构建前还必须修改 `mobile/app.json` 中的 Android 包名、iOS Bundle ID 和 EAS projectId。详见部署指南。
+生产构建前请在 `mobile/.env` 或 EAS 环境变量中配置自己的应用名称、包名、Bundle ID、API 地址和 EAS projectId。详见部署指南。
 
 ## 配置文件
 

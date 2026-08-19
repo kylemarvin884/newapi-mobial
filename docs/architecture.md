@@ -45,7 +45,7 @@ NewAPI
 
 ## 认证流程
 
-1. App 将用户名和密码提交给 Kyle AI 后端；
+1. App 将用户名和密码提交给你的应用后端；
 2. 后端请求 NewAPI 登录接口；
 3. 上游 access token / cookie 被加密后写入 Redis；
 4. 后端生成独立的高熵 Session Token 返回给 App；

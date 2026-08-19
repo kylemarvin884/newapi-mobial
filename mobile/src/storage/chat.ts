@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { storageKey as namespacedStorageKey } from '@/constants/app';
 import type { ChatMessage } from '@/types/api';
 
-const legacyChatKey = 'kyle-ai-chat-history';
+const legacyChatKey = namespacedStorageKey('chat-history');
 const maxConversations = 40;
 const maxMessagesPerConversation = 80;
 const writeQueues = new Map<number, Promise<void>>();
@@ -48,7 +49,7 @@ export function conversationTitle(content: string): string {
 }
 
 function storageKey(userId: number): string {
-  return `kyle-ai-chat-history-v2:${userId}`;
+  return namespacedStorageKey(`chat-history-v2:${userId}`);
 }
 
 function isChatMessage(value: unknown): value is ChatMessage {

@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "Kyle AI",
-    "slug": "kyle-ai",
+    "name": "NewAPI Mobile",
+    "slug": "newapi-mobile",
     "version": "0.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon-ios.png",
-    "scheme": "kyleai",
+    "scheme": "newapimobile",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.lianhaotian.kyleai",
+      "bundleIdentifier": "com.example.newapimobile",
       "icon": "./assets/icon-ios.png",
       "config": {
         "usesNonExemptEncryption": false
@@ -22,30 +22,11 @@
         "foregroundImage": "./assets/icon-ios.png",
         "backgroundColor": "#F7FAF9"
       },
-      "package": "com.lianhaotian.kyleai"
+      "package": "com.example.newapimobile"
     },
     "plugins": [
       "expo-router",
       "expo-secure-store",
-      [
-        "react-native-android-widget",
-        {
-          "widgets": [
-            {
-              "name": "Balance",
-              "label": "Kyle AI 余额",
-              "description": "查看余额和累计 Token",
-              "minWidth": "180dp",
-              "minHeight": "110dp",
-              "targetCellWidth": 3,
-              "targetCellHeight": 2,
-              "resizeMode": "horizontal",
-              "previewImage": "./assets/icon.png",
-              "updatePeriodMillis": 1800000
-            }
-          ]
-        }
-      ],
       "expo-font",
       [
         "expo-splash-screen",
@@ -61,17 +42,9 @@
       "typedRoutes": true
     },
     "extra": {
-      "apiBaseUrl": "https://app-api.lianhaotian.com/api/v1",
-      "androidDownloadUrl": "https://app-api.lianhaotian.com/downloads/kyle-ai.apk",
-      "androidReleaseManifestUrl": "https://app-api.lianhaotian.com/downloads/android-release.json",
-      "androidShareUrl": "https://app-api.lianhaotian.com/download",
       "router": {},
-      "eas": {
-        "projectId": "b2c61c3e-a8de-4f73-8bcf-6324a60ea12e"
-      },
-      "iosDownloadUrl": "https://app-api.lianhaotian.com/ios",
-      "iosReleaseManifestUrl": "https://app-api.lianhaotian.com/downloads/ios-release.json",
-      "iosShareUrl": "https://app-api.lianhaotian.com/ios"
+      "appName": "NewAPI Mobile",
+      "storageNamespace": "newapi-mobile"
     }
   }
 }

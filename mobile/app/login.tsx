@@ -15,6 +15,7 @@ import { useRouter } from 'expo-router';
 
 import { api } from '@/api/client';
 import { PrimaryButton } from '@/components/PrimaryButton';
+import { appName } from '@/constants/app';
 import { colors, radius } from '@/constants/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -126,7 +127,7 @@ export default function LoginScreen() {
         keyboardShouldPersistTaps="handled">
         <View style={styles.brand}>
           <Image source={require('../assets/icon.png')} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.title}>Kyle AI</Text>
+          <Text style={styles.title}>{appName}</Text>
           <Text style={styles.subtitle}>
             {challengeToken ? t('twoFactorSubtitle') : mode === 'login' ? t('loginSubtitle') : t('registerSubtitle')}
           </Text>

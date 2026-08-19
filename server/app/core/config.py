@@ -5,8 +5,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "Kyle AI Mobile API"
+    app_name: str = "NewAPI Mobile API"
     environment: str = "production"
+    redis_namespace: str = "newapi-mobile"
     newapi_base_url: str = "https://newapi.example.com"
     redis_url: str = "redis://redis:6379/0"
     session_secret: str = Field(min_length=32)
@@ -21,6 +22,14 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
+
+    @field_validator("redis_namespace")
+    @classmethod
+    def normalize_namespace(cls, value: str) -> str:
+        normalized = value.strip()
+        if not normalized or any(char not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for char in normalized):
+            raise ValueError("REDIS_NAMESPACE 只能包含字母、数字、连字符和下划线")
+        return normalized
 
     @field_validator("newapi_base_url")
     @classmethod

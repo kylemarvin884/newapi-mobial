@@ -22,7 +22,7 @@ api.example.com {
     }
 
     log {
-        output file /var/log/caddy/kyle-ai-access.log {
+        output file /var/log/caddy/newapi-mobile-access.log {
             roll_size 10MB
             roll_keep 10
         }

@@ -1,6 +1,6 @@
 # NewAPI Mobile
 
-NewAPI Mobile（应用显示名称为 Kyle AI）是一个连接 NewAPI 的跨平台移动客户端和安全代理后端。
+NewAPI Mobile 是一个连接 NewAPI 的跨平台移动客户端和安全代理后端。应用显示名称、包名、服务地址和发布链接都可以由部署者自定义。
 
 <div class="grid cards" markdown>
 

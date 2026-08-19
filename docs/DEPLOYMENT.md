@@ -1,12 +1,12 @@
-# Kyle AI 服务器部署指南
+# NewAPI Mobile 服务器部署指南
 
-本文档面向第一次部署 Kyle AI 的服务器管理员。按顺序完成后，你将得到：
+本文档面向第一次部署 NewAPI Mobile 的服务器管理员。按顺序完成后，你将得到：
 
 - 一个运行于 Docker 中的 FastAPI + Redis 后端；
 - 一个带自动 HTTPS 的公开 API 域名；
 - 一个连接到你自己后端和 NewAPI 实例的移动端构建。
 
-> Kyle AI 不是 NewAPI 本身。你必须已经拥有一个可访问的 NewAPI 实例，并拥有修改其注册、邮件和用户策略的权限。
+> NewAPI Mobile 不是 NewAPI 本身。你必须已经拥有一个可访问的 NewAPI 实例，并拥有修改其注册、邮件和用户策略的权限。
 
 ## 1. 部署拓扑
 
@@ -213,8 +213,8 @@ curl --fail https://api.my-domain.com/health
 ```bash
 cd /opt/newapi-mobial
 sed 's/api\.example\.com/api.my-domain.com/g' deploy/nginx-bootstrap.conf \
-  | sudo tee /etc/nginx/sites-available/kyle-ai >/dev/null
-sudo ln -s /etc/nginx/sites-available/kyle-ai /etc/nginx/sites-enabled/kyle-ai
+  | sudo tee /etc/nginx/sites-available/newapi-mobile >/dev/null
+sudo ln -s /etc/nginx/sites-available/newapi-mobile /etc/nginx/sites-enabled/newapi-mobile
 sudo mkdir -p /var/www/certbot
 sudo nginx -t
 sudo systemctl reload nginx
@@ -232,7 +232,7 @@ sudo certbot certonly --webroot \
 
 ```bash
 sed 's/api\.example\.com/api.my-domain.com/g' deploy/nginx-app-api.conf \
-  | sudo tee /etc/nginx/sites-available/kyle-ai >/dev/null
+  | sudo tee /etc/nginx/sites-available/newapi-mobile >/dev/null
 sudo nginx -t
 sudo systemctl reload nginx
 curl --fail https://api.my-domain.com/health
@@ -258,13 +258,19 @@ EXPO_PUBLIC_API_BASE_URL=https://api.my-domain.com/api/v1
 
 如果启用应用内更新、下载和分享页面，还应设置其余 URL。详见 `mobile/.env.example`。
 
-同时修改 `mobile/app.json`：
+编辑 `mobile/.env` 中的应用身份配置：
 
-- `expo.name`、`expo.slug`：你的应用名称；
-- `ios.bundleIdentifier`：你拥有的唯一 Bundle ID；
-- `android.package`：你拥有的唯一 Android 包名；
-- 删除或替换 `extra.eas.projectId`，不要使用他人的 EAS 项目 ID；
-- 更新 `version`、`android.versionCode` 和 `ios.buildNumber`。
+```dotenv
+APP_NAME=你的应用名称
+APP_SLUG=your-app-slug
+APP_SCHEME=yourapp
+ANDROID_PACKAGE=com.yourcompany.yourapp
+IOS_BUNDLE_IDENTIFIER=com.yourcompany.yourapp
+EAS_PROJECT_ID=
+EXPO_PUBLIC_STORAGE_NAMESPACE=your-app-slug
+```
+
+`mobile/app.config.ts` 会在构建时将这些值应用到 Expo 配置。首次使用 EAS 时运行 `npx eas-cli init`，它会创建或关联你自己的 EAS 项目；不要复用仓库作者的项目 ID。仍需更新 `mobile/app.json` 中的版本号、Android `versionCode` 和 iOS `buildNumber`。
 
 本地预览：
 
@@ -312,11 +318,23 @@ npx eas-cli build --platform ios --profile production
 
 商店发布前还需准备隐私政策、数据使用说明和应用商店资料。
 
-## 10. 可选：托管 APK 和更新清单
+## 10. 应用品牌与更新清单
+
+项目默认不绑定任何个人品牌。部署者可以在 `mobile/.env` 或 EAS 环境变量中自定义：
+
+- App 显示名称、slug、Deep Link scheme；
+- Android package 和 iOS Bundle ID；
+- API、下载、更新清单和分享地址；
+- EAS projectId；
+- 本地存储命名空间。
+
+修改这些值后必须重新构建 App。已经安装的旧 App 不会自动改变名称、包名或后端地址。
+
+### 可选：托管 APK 和更新清单
 
 若要让 Android App 内的“检查更新”可用：
 
-1. 将 APK 命名为 `kyle-ai.apk`，放到服务器 `/opt/newapi-mobial/`；
+1. 将 APK 按你的应用名称命名（例如 `my-ai.apk`），放到服务器 `/opt/newapi-mobial/`；
 2. 复制并修改 `android-release.example.json` 为 `android-release.json`；
 3. 填入你的域名、版本号、文件大小和 SHA-256；
 4. 使用项目 Nginx 模板，或在 Caddy 中自行添加静态文件路由；
@@ -325,8 +343,8 @@ npx eas-cli build --platform ios --profile production
 计算文件信息：
 
 ```bash
-stat -c %s kyle-ai.apk
-sha256sum kyle-ai.apk
+stat -c %s app.apk
+sha256sum app.apk
 ```
 
 每次发布需同步递增：
@@ -342,7 +360,7 @@ sha256sum kyle-ai.apk
 
 ```bash
 cd /opt/newapi-mobial
-cp server/.env "$HOME/kyle-ai.env.backup"
+cp server/.env "$HOME/newapi-mobile.env.backup"
 docker compose exec redis redis-cli BGSAVE
 ```
 

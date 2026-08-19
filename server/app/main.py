@@ -21,7 +21,10 @@ async def lifespan(app: FastAPI):
     redis = build_redis(settings.redis_url)
     app.state.redis = redis
     app.state.session_store = SessionStore(
-        redis, SecretBox(settings.session_secret), settings.session_ttl_seconds
+        redis,
+        SecretBox(settings.session_secret),
+        settings.session_ttl_seconds,
+        settings.redis_namespace,
     )
     app.state.newapi = NewApiClient(
         settings.newapi_base_url, settings.request_timeout_seconds

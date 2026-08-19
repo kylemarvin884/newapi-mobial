@@ -1,14 +1,14 @@
 {
   "version": "1.0.0",
   "version_code": 1,
-  "download_url": "https://api.example.com/downloads/kyle-ai.apk",
+  "download_url": "https://api.example.com/downloads/app.apk",
   "share_url": "https://api.example.com/download",
   "size_bytes": 0,
   "sha256": "REPLACE_WITH_SHA256",
   "release_notes": [
     "Initial release"
   ],
-  "share_text": "Download Kyle AI from your official server.",
+  "share_text": "Download your AI app from your official server.",
   "force_update": false,
   "published_at": "2026-01-01T00:00:00Z"
 }

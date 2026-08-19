@@ -7,6 +7,7 @@
 ```bash
 cd mobile
 cp .env.example .env
+# 编辑 .env：至少填写 APP_NAME、EXPO_PUBLIC_API_BASE_URL、自己的包名
 npm ci
 npm run typecheck
 npm run lint
