@@ -24,11 +24,11 @@ def new_session_token() -> str:
     return secrets.token_urlsafe(48)
 
 
-def session_key(token: str) -> str:
+def session_key(token: str, namespace: str = "newapi-mobile") -> str:
     digest = hashlib.sha256(token.encode("utf-8")).hexdigest()
-    return f"mobile:session:{digest}"
+    return f"{namespace}:session:{digest}"
 
 
-def pending_login_key(token: str) -> str:
+def pending_login_key(token: str, namespace: str = "newapi-mobile") -> str:
     digest = hashlib.sha256(token.encode("utf-8")).hexdigest()
-    return f"mobile:pending-login:{digest}"
+    return f"{namespace}:pending-login:{digest}"

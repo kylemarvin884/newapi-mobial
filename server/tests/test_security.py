@@ -12,11 +12,11 @@ def test_session_key_does_not_expose_token() -> None:
     token = "mobile-secret-token"
     key = session_key(token)
     assert token not in key
-    assert key.startswith("mobile:session:")
+    assert key.startswith("newapi-mobile:session:")
 
 
 def test_pending_login_key_does_not_expose_token() -> None:
     token = "pending-secret-token"
     key = pending_login_key(token)
     assert token not in key
-    assert key.startswith("mobile:pending-login:")
+    assert key.startswith("newapi-mobile:pending-login:")

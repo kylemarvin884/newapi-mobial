@@ -21,6 +21,11 @@ class MemoryStore:
             self.values.pop(name, None)
             self.ttls.pop(name, None)
 
+    async def incrby(self, name: str, amount: int) -> int:
+        value = int(self.values.get(name, "0")) + amount
+        self.values[name] = str(value)
+        return value
+
 
 @pytest.mark.asyncio
 async def test_pending_login_is_encrypted_and_short_lived() -> None:
@@ -37,6 +42,15 @@ async def test_pending_login_is_encrypted_and_short_lived() -> None:
 
     await store.delete_pending_login(challenge)
     assert await store.get_pending_login(challenge) is None
+
+
+@pytest.mark.asyncio
+async def test_usage_keys_use_custom_namespace() -> None:
+    redis = MemoryStore()
+    store = SessionStore(redis, SecretBox("a" * 32), 60, "acme-ai")
+    assert await store.add_used_tokens(7, 42) == 42
+    assert await store.get_used_tokens(7) == 42
+    assert "acme-ai:usage:7:tokens" in redis.values
 
 
 def test_cookie_session_does_not_require_token_refresh() -> None:

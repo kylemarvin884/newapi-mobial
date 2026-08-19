@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-REPO_URL="${REPO_URL:-https://github.com/your-org/your-repo.git}"
+REPO_URL="${REPO_URL:-https://github.com/kylemarvin884/newapi-mobial.git}"
 SOURCE_DIR="${SOURCE_DIR:-/opt/newapi-mobial}"
-WEB_ROOT="${WEB_ROOT:-/www/wwwroot/docs.example.com}"
+WEB_ROOT="${WEB_ROOT:-/www/wwwroot/docs.lianhaotian.com}"
 VENV_DIR="${VENV_DIR:-/opt/newapi-mobial-docs-venv}"
 BRANCH="${BRANCH:-main}"
 
@@ -27,6 +27,9 @@ fi
 
 python3 -m venv "$VENV_DIR"
 "$VENV_DIR/bin/python" -m pip install --disable-pip-version-check -r "$SOURCE_DIR/requirements-docs.txt"
+DOCS_SITE_URL="${DOCS_SITE_URL:-https://docs.lianhaotian.com/}" \
+REPO_URL="${REPO_URL%.git}" \
+REPO_NAME="${REPO_NAME:-kylemarvin884/newapi-mobial}" \
 "$VENV_DIR/bin/mkdocs" build --strict --config-file "$SOURCE_DIR/mkdocs.yml"
 
 install -d -m 0755 "$WEB_ROOT"

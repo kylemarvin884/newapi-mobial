@@ -54,6 +54,12 @@ class SessionStore:
         self.ttl = ttl
         self.namespace = namespace
 
+    def _session_key(self, token: str) -> str:
+        return session_key(token, self.namespace)
+
+    def _pending_login_key(self, token: str) -> str:
+        return pending_login_key(token, self.namespace)
+
     async def create(self, session: UpstreamSession) -> str:
         token = new_session_token()
         await self.save(token, session)
@@ -61,10 +67,10 @@ class SessionStore:
 
     async def save(self, token: str, session: UpstreamSession) -> None:
         encrypted = self.secret_box.encrypt(json.dumps(asdict(session)))
-        await self.redis.setex(session_key(token), self.ttl, encrypted)
+        await self.redis.setex(self._session_key(token), self.ttl, encrypted)
 
     async def get(self, token: str) -> UpstreamSession | None:
-        raw = await self.redis.get(session_key(token))
+        raw = await self.redis.get(self._session_key(token))
         if raw is None:
             return None
         value = raw.decode("utf-8") if isinstance(raw, bytes) else raw
@@ -73,23 +79,23 @@ class SessionStore:
         except (ValueError, json.JSONDecodeError, TypeError, KeyError):
             await self.delete(token)
             return None
-        await self.redis.expire(session_key(token), self.ttl)
+        await self.redis.expire(self._session_key(token), self.ttl)
         return UpstreamSession(**payload)
 
     async def delete(self, token: str) -> None:
-        await self.redis.delete(session_key(token))
+        await self.redis.delete(self._session_key(token))
 
     async def create_pending_login(self, flow_token: str, cookie: str) -> str:
         token = new_session_token()
         pending = PendingLogin(flow_token=flow_token, cookie=cookie)
         encrypted = self.secret_box.encrypt(json.dumps(asdict(pending)))
         await self.redis.setex(
-            pending_login_key(token), self.pending_login_ttl, encrypted
+            self._pending_login_key(token), self.pending_login_ttl, encrypted
         )
         return token
 
     async def get_pending_login(self, token: str) -> PendingLogin | None:
-        key = pending_login_key(token)
+        key = self._pending_login_key(token)
         raw = await self.redis.get(key)
         if raw is None:
             return None
@@ -102,7 +108,7 @@ class SessionStore:
             return None
 
     async def delete_pending_login(self, token: str) -> None:
-        await self.redis.delete(pending_login_key(token))
+        await self.redis.delete(self._pending_login_key(token))
 
     async def add_used_tokens(self, user_id: int, amount: int) -> int:
         if amount <= 0:
@@ -116,7 +122,7 @@ class SessionStore:
     @asynccontextmanager
     async def refresh_guard(self, token: str) -> AsyncIterator[None]:
         lock = self.redis.lock(
-            f"{session_key(token)}:refresh",
+            f"{self._session_key(token)}:refresh",
             timeout=15,
             blocking_timeout=10,
         )
