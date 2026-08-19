@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#147d64" />
+    <title>Kyle AI iOS 版</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: #13201b;
+        background: #f7faf9;
+        font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      }
+      main {
+        width: min(100%, 460px);
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: max(34px, env(safe-area-inset-top)) 22px max(28px, env(safe-area-inset-bottom));
+        background: #fff;
+      }
+      .logo {
+        width: 88px;
+        height: 88px;
+        display: block;
+        margin: 0 auto 18px;
+        border-radius: 8px;
+      }
+      h1 { margin: 0; text-align: center; font-size: 30px; }
+      .subtitle { margin: 8px 0 24px; color: #66756f; text-align: center; line-height: 1.6; }
+      .eyebrow {
+        width: fit-content;
+        margin: 0 auto 8px;
+        color: #d07a26;
+        font-size: 12px;
+        font-weight: 800;
+      }
+      ul { margin: 0 0 24px; padding: 0; border-top: 1px solid #dce7e2; list-style: none; }
+      li {
+        position: relative;
+        min-height: 54px;
+        display: flex;
+        align-items: center;
+        padding: 12px 4px 12px 30px;
+        border-bottom: 1px solid #dce7e2;
+        color: #31423b;
+        line-height: 1.55;
+      }
+      li::before { content: "✓"; position: absolute; left: 4px; color: #147d64; font-weight: 900; }
+      .download {
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #fff;
+        background: #147d64;
+        font-size: 17px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+      .download:active { background: #0e5e4b; }
+      .tip {
+        margin: 16px 0 0;
+        padding: 12px 14px;
+        border-left: 3px solid #d07a26;
+        border-radius: 4px;
+        color: #7b4b18;
+        background: #fff3df;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+      footer { margin-top: 18px; color: #8a9892; text-align: center; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img class="logo" src="/downloads/icon.png" alt="Kyle AI 图标" />
+      <p class="eyebrow">iOS 客户端</p>
+      <h1>Kyle AI</h1>
+      <p class="subtitle">让多种 AI 模型随时装进口袋，聊天与账户管理一个 App 全部搞定。</p>
+      <ul>
+        <li>支持多种 AI 模型和分组选择</li>
+        <li>支持 AI 图片生成</li>
+        <li>随时查看余额并管理 API Key</li>
+      </ul>
+      <div class="download" style="background:#66756f; cursor: default;">iOS 版本正在准备中</div>
+      <p class="tip">iOS 版本将通过 TestFlight 或 App Store 发布。请等待发布者提供最新安装链接，并使用 iPhone 自带 Safari 打开。</p>
+      <footer>仅提供 iOS 版本 · 请从本页面获取最新版</footer>
+    </main>
+  </body>
+</html>

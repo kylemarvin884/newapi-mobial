@@ -1,0 +1,30 @@
+# Replace api.example.com with your public API domain.
+# DNS must point to this server and ports 80/443 must be reachable.
+api.example.com {
+    encode zstd gzip
+
+    # Keep request bodies bounded. Chat payloads are text-only.
+    request_body {
+        max_size 2MB
+    }
+
+    reverse_proxy 127.0.0.1:8100 {
+        transport http {
+            dial_timeout 10s
+            response_header_timeout 120s
+        }
+    }
+
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy no-referrer
+        -Server
+    }
+
+    log {
+        output file /var/log/caddy/kyle-ai-access.log {
+            roll_size 10MB
+            roll_keep 10
+        }
+    }
+}

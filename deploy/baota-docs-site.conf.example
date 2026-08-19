@@ -1,0 +1,34 @@
+server {
+    listen 80;
+    listen 443 ssl http2;
+    server_name docs.lianhaotian.com;
+
+    index index.html;
+    root /www/wwwroot/docs.lianhaotian.com;
+
+    # Let Baota manage and replace these certificate paths.
+    ssl_certificate     /www/server/panel/vhost/cert/docs.lianhaotian.com/fullchain.pem;
+    ssl_certificate_key /www/server/panel/vhost/cert/docs.lianhaotian.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    if ($server_port !~ 443) {
+        rewrite ^(/.*)$ https://$host$1 permanent;
+    }
+
+    location / {
+        try_files $uri $uri/ $uri/index.html =404;
+    }
+
+    location ~* \.(?:css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2)$ {
+        expires 7d;
+        add_header Cache-Control "public, max-age=604800";
+        try_files $uri =404;
+    }
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header X-Frame-Options SAMEORIGIN always;
+
+    access_log /www/wwwlogs/docs.lianhaotian.com.log;
+    error_log  /www/wwwlogs/docs.lianhaotian.com.error.log;
+}

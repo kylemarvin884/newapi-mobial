@@ -1,0 +1,67 @@
+site_name: NewAPI Mobile 开发文档
+site_description: NewAPI Mobile 的开发、自托管、构建和运维文档
+site_url: https://docs.lianhaotian.com/
+repo_url: https://github.com/kylemarvin884/newapi-mobial
+repo_name: kylemarvin884/newapi-mobial
+edit_uri: edit/main/docs/
+
+nav:
+  - 首页: index.md
+  - 项目架构: architecture.md
+  - 配置说明: configuration.md
+  - 服务器部署: DEPLOYMENT.md
+  - 本地开发: development.md
+  - API 概览: api.md
+  - 发布与运维: operations.md
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+  palette:
+    - scheme: default
+      primary: teal
+      accent: orange
+      toggle:
+        icon: material/weather-night
+        name: 切换到深色模式
+    - scheme: slate
+      primary: teal
+      accent: orange
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到浅色模式
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/kylemarvin884/newapi-mobial
+
+copyright: Copyright &copy; 2026 Kyle Marvin · MIT License
