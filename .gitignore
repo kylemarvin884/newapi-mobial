@@ -8,6 +8,7 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .venv/
+.docs-venv/
 node_modules/
 .expo/
 .expo-home/
