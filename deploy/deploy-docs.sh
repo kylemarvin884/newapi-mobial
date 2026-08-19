@@ -33,13 +33,14 @@ REPO_NAME="${REPO_NAME:-kylemarvin884/newapi-mobial}" \
 "$VENV_DIR/bin/mkdocs" build --strict --config-file "$SOURCE_DIR/mkdocs.yml"
 
 install -d -m 0755 "$WEB_ROOT"
-find "$WEB_ROOT" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
+# Preserve Baota's managed control files such as .user.ini.
+find "$WEB_ROOT" -mindepth 1 -maxdepth 1 ! -name .user.ini -exec rm -rf -- {} +
 cp -a "$SOURCE_DIR/site/." "$WEB_ROOT/"
 find "$WEB_ROOT" -type d -exec chmod 0755 {} +
-find "$WEB_ROOT" -type f -exec chmod 0644 {} +
+find "$WEB_ROOT" -type f ! -name .user.ini -exec chmod 0644 {} +
 
 if id www >/dev/null 2>&1; then
-  chown -R www:www "$WEB_ROOT"
+  find "$WEB_ROOT" -mindepth 1 ! -name .user.ini -exec chown www:www {} +
 fi
 
 echo "文档已部署到 $WEB_ROOT"
