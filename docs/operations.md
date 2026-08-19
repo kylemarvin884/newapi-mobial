@@ -66,7 +66,15 @@ mkdocs build --strict
 rsync -az --delete site/ root@服务器:/www/wwwroot/docs.lianhaotian.com/
 ```
 
-在宝塔中创建纯静态站点，绑定 `docs.lianhaotian.com`，申请 Let's Encrypt 证书并开启 HTTP → HTTPS。网站目录指向上述目录，默认文档使用 `index.html`。
+仓库提供 `deploy/deploy-docs.sh`，在服务器拉取公开仓库后可直接执行：
+
+```bash
+cd /opt/newapi-mobial
+chmod +x deploy/deploy-docs.sh
+./deploy/deploy-docs.sh
+```
+
+在宝塔中创建纯静态站点，绑定 `docs.lianhaotian.com`，申请 Let's Encrypt 证书并开启 HTTP → HTTPS。网站目录指向 `/www/wwwroot/docs.lianhaotian.com`，默认文档使用 `index.html`。
 
 ## 日志和隐私
 
