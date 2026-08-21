@@ -69,18 +69,23 @@ mkdocs build --strict
 生成目录是 `site/`。将其同步到服务器文档站根目录，例如：
 
 ```bash
-rsync -az --delete site/ root@服务器:/www/wwwroot/docs.example.com/
+rsync -az --delete site/ root@服务器:/var/www/docs/
 ```
 
 仓库提供 `deploy/deploy-docs.sh`，在服务器拉取公开仓库后可直接执行：
 
 ```bash
 cd /opt/newapi-mobial
-chmod +x deploy/deploy-docs.sh
-./deploy/deploy-docs.sh
+bash deploy/deploy-docs.sh
 ```
 
-在宝塔中创建纯静态站点，绑定你自己的文档域名（例如 `docs.example.com`），申请 Let's Encrypt 证书并开启 HTTP → HTTPS。网站目录指向 `/www/wwwroot/docs.example.com`，默认文档使用 `index.html`。
+默认部署目录是 `/var/www/docs`，可通过 `WEB_ROOT` 环境变量覆盖：
+
+```bash
+WEB_ROOT=/var/www/docs bash deploy/deploy-docs.sh
+```
+
+在 Web 服务器中创建纯静态站点，绑定你自己的文档域名（例如 `docs.example.com`），申请 Let's Encrypt 证书并开启 HTTP → HTTPS。网站根目录指向 `/var/www/docs`（或你自定义的 `WEB_ROOT`），默认文档使用 `index.html`。
 
 ## 日志和隐私
 

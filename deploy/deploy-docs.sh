@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/kylemarvin884/newapi-mobial.git}"
 SOURCE_DIR="${SOURCE_DIR:-/opt/newapi-mobial}"
-WEB_ROOT="${WEB_ROOT:-/www/wwwroot/docs.lianhaotian.com}"
+WEB_ROOT="${WEB_ROOT:-/var/www/docs}"
 VENV_DIR="${VENV_DIR:-/opt/newapi-mobial-docs-venv}"
 BRANCH="${BRANCH:-main}"
 
@@ -33,7 +33,7 @@ REPO_NAME="${REPO_NAME:-kylemarvin884/newapi-mobial}" \
 "$VENV_DIR/bin/mkdocs" build --strict --config-file "$SOURCE_DIR/mkdocs.yml"
 
 install -d -m 0755 "$WEB_ROOT"
-# Preserve Baota's managed control files such as .user.ini.
+# Preserve web-server managed control files such as .user.ini.
 find "$WEB_ROOT" -mindepth 1 -maxdepth 1 ! -name .user.ini -exec rm -rf -- {} +
 cp -a "$SOURCE_DIR/site/." "$WEB_ROOT/"
 find "$WEB_ROOT" -type d -exec chmod 0755 {} +
