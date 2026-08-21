@@ -4,7 +4,8 @@ import httpx
 import pytest
 import respx
 
-from app.schemas import ApiKeyCreate, ImageGenerationRequest
+from app.core.errors import UpstreamError
+from app.schemas import ApiKeyCreate, ChatMessage, ChatRequest, ImageGenerationRequest
 from app.services.newapi import NewApiClient, build_upstream_session, extract_refresh_cookie
 from app.services.session_store import UpstreamSession
 
@@ -311,3 +312,45 @@ async def test_logout_uses_classic_cookie_contract() -> None:
     request = route.calls.last.request
     assert request.headers["cookie"] == "session=opaque"
     assert request.headers["new-api-user"] == "7"
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_chat_key_error_does_not_become_session_logout() -> None:
+    respx.post("https://example.com/v1/chat/completions").mock(
+        return_value=httpx.Response(401, json={"error": {"message": "invalid api key"}})
+    )
+    client = NewApiClient("https://example.com")
+    request = ChatRequest(
+        token_id=3,
+        model="gpt-4o-mini",
+        messages=[ChatMessage(role="user", content="hello")],
+    )
+
+    with pytest.raises(UpstreamError) as exc:
+        await client.chat("sk-test", request)
+
+    assert exc.value.status_code == 400
+    assert "API Key" in exc.value.message
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_reveal_token_forbidden_becomes_client_error() -> None:
+    respx.post("https://example.com/api/token/3/key").mock(
+        return_value=httpx.Response(403, json={"success": False, "message": "forbidden"})
+    )
+    client = NewApiClient("https://example.com")
+    session = UpstreamSession(
+        user_id=7,
+        access_token="access",
+        access_expires_at=9999999999,
+        refresh_cookie="refresh_token=old",
+        session_id="sid-7",
+        user={"id": 7},
+    )
+
+    with pytest.raises(UpstreamError) as exc:
+        await client.reveal_token(session, 3)
+
+    assert exc.value.status_code == 400

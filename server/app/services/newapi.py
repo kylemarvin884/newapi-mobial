@@ -129,7 +129,12 @@ class NewApiClient:
         return await self._request("GET", f"/api/token/{token_id}", session)
 
     async def reveal_token(self, session: UpstreamSession, token_id: int) -> str:
-        payload = await self._request("POST", f"/api/token/{token_id}/key", session)
+        try:
+            payload = await self._request("POST", f"/api/token/{token_id}/key", session)
+        except UpstreamError as exc:
+            if exc.status_code == 401:
+                raise UpstreamError("密钥不存在或无权查看，请重新选择密钥", 400) from exc
+            raise
         return payload["key"]
 
     async def create_token(self, session: UpstreamSession, request: ApiKeyCreate) -> None:
@@ -194,7 +199,7 @@ class NewApiClient:
                 json=body,
             )
         if response.is_error:
-            self._raise_http_error(response)
+            self._raise_model_http_error(response)
         try:
             return response.json()
         except json.JSONDecodeError as exc:
@@ -218,7 +223,7 @@ class NewApiClient:
                 json=body,
             )
         if response.is_error:
-            self._raise_http_error(response)
+            self._raise_model_http_error(response)
         try:
             return response.json()
         except json.JSONDecodeError as exc:
@@ -310,6 +315,23 @@ class NewApiClient:
             pass
         status_code = 401 if response.status_code in (401, 403) else 502
         raise UpstreamError(message, status_code)
+
+    @staticmethod
+    def _raise_model_http_error(response: httpx.Response) -> None:
+        """Map model/API-key errors without treating them as a session logout."""
+        message = f"NewAPI 请求失败 ({response.status_code})"
+        try:
+            payload = response.json()
+            message = payload.get("message") or payload.get("error", {}).get("message") or message
+        except (json.JSONDecodeError, AttributeError):
+            pass
+        if response.status_code in (401, 403):
+            raise UpstreamError(
+                "API Key 无效、已禁用或无权使用该模型，请在密钥管理里检查后重试", 400
+            )
+        if response.status_code == 429:
+            raise UpstreamError(message or "请求过于频繁或额度不足", 429)
+        raise UpstreamError(message, 502)
 
 
 def extract_refresh_cookie(set_cookie: str) -> str:
